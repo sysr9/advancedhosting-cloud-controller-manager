@@ -1,0 +1,155 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: advanced-cloud-controller-manager
+  namespace: kube-system
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: advanced-cloud-controller-manager
+  template:
+    metadata:
+      labels:
+        app: advanced-cloud-controller-manager
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      dnsPolicy: Default
+      hostNetwork: true
+      serviceAccountName: cloud-controller-manager
+      tolerations:
+        - key: "node.cloudprovider.kubernetes.io/uninitialized"
+          value: "true"
+          effect: "NoSchedule"
+        - key: "CriticalAddonsOnly"
+          operator: "Exists"
+        - key: "node-role.kubernetes.io/master"
+          effect: NoSchedule
+      containers:
+        - image: advancedhosting/ah-ccm:v0.1.0
+          name: advancedhosting-cloud-controller-manager
+          args:
+            - --cloud-provider=advancedhosting
+            - --leader-elect=true
+            - --allow-untagged-cloud
+            - --authentication-skip-lookup=true
+          env:
+            - name: AH_CLUSTER_PRIVATE_NETWORK
+              valueFrom:
+                configMapKeyRef:
+                  name: advancedhosting
+                  key: private_network.number
+            - name: AH_CLUSTER_DATACENTER
+              valueFrom:
+                configMapKeyRef:
+                  name: advancedhosting
+                  key: datacenter.slug
+            - name: AH_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: advancedhosting
+                  key: token
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cloud-controller-manager
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  name: system:cloud-controller-manager
+rules:
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - get
+      - watch
+      - list
+      - create
+      - update
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - nodes/status
+    verbs:
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - services/status
+    verbs:
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumes
+    verbs:
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: system:cloud-controller-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:cloud-controller-manager
+subjects:
+  - kind: ServiceAccount
+    name: cloud-controller-manager
+    namespace: kube-system
