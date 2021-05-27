@@ -29,7 +29,7 @@ data:
   datacenter.slug: "DATACENTER-SLUG"
 ---
 ```
-Deploy CSI via kubectl:
+Deploy CCM:
 ```
 kubectl apply -f https://raw.githubusercontent.com/advancedhosting/
 advancedhosting-cloud-controller-manager
