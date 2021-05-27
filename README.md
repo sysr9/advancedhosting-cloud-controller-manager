@@ -31,7 +31,5 @@ data:
 ```
 Deploy CCM:
 ```
-kubectl apply -f https://raw.githubusercontent.com/advancedhosting/
-advancedhosting-cloud-controller-manager
-/master/deploy/advancedhosting-ccm-{VERSION}.yaml
+kubectl apply -f https://raw.githubusercontent.com/advancedhosting/advancedhosting-cloud-controller-manager/master/deploy/advancedhosting-ccm-{VERSION}.yaml
 ```
