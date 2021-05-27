@@ -1,0 +1,5 @@
+Please make sure your kubelets run with --cloud-provider=external flag !
+
+Run to verify:
+
+    kubectl get pod -n {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "ah-ccm.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"

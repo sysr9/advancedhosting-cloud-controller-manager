@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ah-ccm.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ah-ccm.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "ah-ccm.fullname" . }}
+  template:
+    metadata:
+      labels:
+        {{- include "ah-ccm.selectorLabels" . | nindent 8 }}
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      dnsPolicy: Default
+      hostNetwork: true
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      tolerations:
+        - key: "node.cloudprovider.kubernetes.io/uninitialized"
+          value: "true"
+          effect: "NoSchedule"
+        - key: "CriticalAddonsOnly"
+          operator: "Exists"
+        - key: "node-role.kubernetes.io/master"
+          effect: NoSchedule
+      containers:
+        - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: advancedhosting-cloud-controller-manager
+          args:
+            - --cloud-provider=advancedhosting
+            - --leader-elect=true
+            - --allow-untagged-cloud
+            - --authentication-skip-lookup=true
+          env:
+            - name: AH_CLUSTER_PRIVATE_NETWORK
+              value: {{ .Values.privateNetworkNumber }}
+            - name: AH_CLUSTER_DATACENTER
+              value: {{ .Values.datacenterSlug }}
+            - name: AH_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: advancedhosting
+                  key: token
