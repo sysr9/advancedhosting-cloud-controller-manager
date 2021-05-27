@@ -27,7 +27,6 @@ metadata:
 data:
   private_network.number: "PRIVATE-NETWORK-NUMBER"
   datacenter.slug: "DATACENTER-SLUG"
----
 ```
 Deploy CCM:
 ```
