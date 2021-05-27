@@ -33,3 +33,10 @@ Deploy CCM:
 ```
 kubectl apply -f https://raw.githubusercontent.com/advancedhosting/advancedhosting-cloud-controller-manager/master/deploy/advancedhosting-ccm-{VERSION}.yaml
 ```
+
+### Install via Helm
+```
+helm repo add ah-ccm ah-csi https://advancedhosting.github.io/advancedhosting-cloud-controller-manager
+helm repo update
+helm install ccm ah-ccm/ah-ccm
+```
