@@ -2,7 +2,13 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Number of the private network to which the cluster is connected
+# Example:
+# privateNetworkNumber: "NET14520581"
 privateNetworkNumber: ""
+# Slug of the datacenter in which the cluster is located
+# Example:
+# datacenterSlug: "ams1"
 datacenterSlug: ""
 
 image:

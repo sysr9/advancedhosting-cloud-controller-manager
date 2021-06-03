@@ -37,5 +37,10 @@ kubectl apply -f https://raw.githubusercontent.com/advancedhosting/advancedhosti
 ```
 helm repo add ah-ccm https://advancedhosting.github.io/advancedhosting-cloud-controller-manager
 helm repo update
-helm install ccm ah-ccm/ah-ccm
+
+# Put your values to these variables:
+NETWORK="NET14520581"
+DATACENTER="ams1"
+
+helm install ccm ah-ccm/ah-ccm --set privateNetworkNumber=$NETWORK --set datacenterSlug=$DATACENTER
 ```

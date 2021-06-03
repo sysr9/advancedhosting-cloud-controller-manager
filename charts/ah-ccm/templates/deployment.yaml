@@ -9,7 +9,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "ah-ccm.fullname" . }}
+      {{- include "ah-ccm.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
