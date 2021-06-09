@@ -2,6 +2,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+apiUrl: ""
+
 # Number of the private network to which the cluster is connected
 # Example:
 # privateNetworkNumber: "NET14520581"

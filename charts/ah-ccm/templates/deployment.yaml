@@ -42,6 +42,10 @@ spec:
               value: {{ .Values.privateNetworkNumber }}
             - name: AH_CLUSTER_DATACENTER
               value: {{ .Values.datacenterSlug }}
+            {{- if .Values.apiUrl }}
+            - name: AH_API_URL
+              value: {{ .Values.apiUrl }}
+            {{- end }}
             - name: AH_API_TOKEN
               valueFrom:
                 secretKeyRef:
