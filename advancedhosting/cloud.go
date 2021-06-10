@@ -70,12 +70,12 @@ func newCloud() (cloudprovider.Interface, error) {
 
 	client, err := ah.NewAPIClient(clientOptions)
 	if err != nil {
-		return nil, fmt.Errorf("An error occurred while creating Api Client")
+		return nil, fmt.Errorf("an error occurred while creating Api Client: %s", err)
 	}
 
 	clusterInfo, err := newClusterInfo(client)
 	if err != nil {
-		return nil, fmt.Errorf("An error occurred while creating clusterInfo")
+		return nil, fmt.Errorf("фn error occurred while creating clusterInfo: %s", err)
 	}
 
 	return &cloud{
