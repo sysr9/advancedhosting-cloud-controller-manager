@@ -29,7 +29,7 @@ spec:
         - key: "node-role.kubernetes.io/master"
           effect: NoSchedule
       containers:
-        - image: advancedhosting/ah-ccm:v0.1.0
+        - image: advancedhosting/ah-ccm:v0.1.1
           name: advancedhosting-cloud-controller-manager
           args:
             - --cloud-provider=advancedhosting
@@ -37,7 +37,7 @@ spec:
             - --allow-untagged-cloud
             - --authentication-skip-lookup=true
           env:
-            - name: AH_CLUSTER_PRIVATE_NETWORK
+            - name: AH_CLUSTER_PRIVATE_NETWORK_NUMBER
               valueFrom:
                 configMapKeyRef:
                   name: advancedhosting
