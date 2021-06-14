@@ -75,7 +75,7 @@ func newCloud() (cloudprovider.Interface, error) {
 
 	clusterInfo, err := newClusterInfo(client)
 	if err != nil {
-		return nil, fmt.Errorf("фn error occurred while creating clusterInfo: %s", err)
+		return nil, fmt.Errorf("an error occurred while creating clusterInfo: %s", err)
 	}
 
 	return &cloud{
